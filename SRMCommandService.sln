@@ -6,10 +6,21 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMCommandService", "SRMCommandService\SRMCommandService.csproj", "{2A833155-3AB6-4A20-AABB-CC20291EC6CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMTestConsumer", "SRMTestConsumer\SRMTestConsumer.csproj", "{01312C0B-73EC-4340-9F1C-1589F4413A3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FADD7591-A166-40E7-AED1-F2F2BFF41DE7} = {FADD7591-A166-40E7-AED1-F2F2BFF41DE7}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMTestConsole", "SRMTestConsole\SRMTestConsole.csproj", "{4BF0A59F-9FAA-4E19-BA3C-B2EBF8B74BC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMFileSystemCommand", "Commands\SRMFileSystemCommand\SRMFileSystemCommand.csproj", "{FADD7591-A166-40E7-AED1-F2F2BFF41DE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRMAgent", "SRMAgent", "{A1139C9D-3A4A-4E0E-82A3-76E4421E3049}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRMServer", "SRMServer", "{A62FBAC7-E2BF-4956-B427-8C4DB58784F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRMConsole", "SRMConsole", "{A70C34B8-8181-41F6-B3BC-F1A6AEC04D03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRMCommands", "SRMCommands", "{C69F1284-F025-4082-9957-014B97894BEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +47,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2A833155-3AB6-4A20-AABB-CC20291EC6CA} = {A1139C9D-3A4A-4E0E-82A3-76E4421E3049}
+		{01312C0B-73EC-4340-9F1C-1589F4413A3A} = {A62FBAC7-E2BF-4956-B427-8C4DB58784F8}
+		{4BF0A59F-9FAA-4E19-BA3C-B2EBF8B74BC1} = {A1139C9D-3A4A-4E0E-82A3-76E4421E3049}
+		{FADD7591-A166-40E7-AED1-F2F2BFF41DE7} = {C69F1284-F025-4082-9957-014B97894BEC}
 	EndGlobalSection
 EndGlobal

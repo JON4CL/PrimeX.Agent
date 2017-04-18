@@ -57,6 +57,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "C:\_WORKSPACE\GITHUB\SRMCommandService\Commands\SRMFileSystemCommand\bin\Debug\*.dll" "C:\_WORKSPACE\GITHUB\SRMCommandService\SRMCommandService\bin\Debug\Services\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

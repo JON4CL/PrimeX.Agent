@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SRMCommandService;
 using System.IO;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace SRMFileSystemCommand
 {
+    public class JDriveInfo
+    {
+        public string DEVICEID = "";
+        public string FREESPACE = "";
+        public string TOTALSIZE = "";
+        public string USEDSPACE = "";
+    }
+
     public class DrivesInfoCommand : ICommand
     {
-        private string commandName = "getDrivesInfo";
-        private string commandDescription = "Get the drives information in a JSON format.";
-        private string commandVersion = "0.0.1";
+        public static string commandServiceName = "SRMFileSystemCommand";
+        public static string commandName = "GetDrivesInfo";
+        public static string commandDescription = "Get the drives information in a JSON format.";
+        public static string commandVersion = "0.0.1";
 
         private const string NO_EMPTY_DRIVES = "NO_EMPTY_DRIVES";
         private const string NO_REMOVABLE_DRIVES = "NO_REMOVABLE_DRIVES";
@@ -44,11 +51,51 @@ namespace SRMFileSystemCommand
             // ----------------------------------------------------------------
 
             //request.valueParam.Contains<string>("NO_EMPTY_DRIVES");
+            CommandResponse[] cmdResp = null;
+            List<JDriveInfo> driveInfoList = new List<JDriveInfo>();
+            try
+            {
+                string respData = "";
+                
+                foreach (DriveInfo di in DriveInfo.GetDrives())
+                {
+                    if (!di.IsReady)
+                    {
+                        continue;
+                    }
+                    if (di.DriveType != DriveType.Fixed && request.valueParam.Contains<string>("NO_REMOVABLE_DRIVES") == true)
+                    {
+                        continue;
+                    }
+                    if (di.TotalSize == 0 && request.valueParam.Contains<string>("NO_EMPTY_DRIVES") == true)
+                    {
+                        continue;
+                    }
+                    var data = new JDriveInfo()
+                    {
+                        DEVICEID = di.Name,
+                        FREESPACE = di.TotalFreeSpace.ToString(),
+                        TOTALSIZE = di.TotalSize.ToString(),
+                        USEDSPACE = (di.TotalSize - di.TotalFreeSpace).ToString()
+                    };
+                    driveInfoList.Add(data);
+                }
 
-            DriveInfo[] di = DriveInfo.GetDrives();
-            string json = JsonConvert.SerializeObject(di);
+                respData = JsonConvert.SerializeObject(driveInfoList.ToArray());
+                cmdResp = new CommandResponse[1] {
+                    new CommandResponse(CommandResponseCodes.OK_COMMAND_SUCCESS[0],
+                                        respData)
+                };
+            }
+            catch (Exception ex)
+            {
+                cmdResp = new CommandResponse[1] {
+                    new CommandResponse(CommandResponseCodes.ERROR_EXCEPTION_FOUND[0], 
+                                        CommandResponseCodes.ERROR_EXCEPTION_FOUND[1] + ex.Message)
+                };
+            }
 
-            return new CommandResponse[1] { new CommandResponse("O0001", json) };
+            return cmdResp;
         }
     }
 }

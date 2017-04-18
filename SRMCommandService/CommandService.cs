@@ -10,14 +10,26 @@ namespace SRMCommandService
         public CommandResponse[] ExecuteCommand(CommandRequest req)
         {
             CommandResponse[] resp = null;
-            ICommand cmd = getCommand(req.serviceName, req.serviceCommand);
-            if (cmd != null)
+            try
             { 
-                resp = cmd.runCommand(req);
-            }
-            else
+                ICommand cmd = getCommand(req.serviceName, req.serviceCommand);
+                if (cmd != null)
+                { 
+                    resp = cmd.runCommand(req);
+                }
+                else
+                {
+                    resp = new CommandResponse[] {
+                        new CommandResponse(CommandResponseCodes.ERROR_COMMAND_NOT_FOUND[0], 
+                                            CommandResponseCodes.ERROR_COMMAND_NOT_FOUND[1])
+                    };
+                }
+            } catch (Exception ex)
             {
-                resp = new CommandResponse[1] { new CommandResponse("E0001", "Command not found.") };
+                resp = new CommandResponse[] {
+                    new CommandResponse(CommandResponseCodes.ERROR_EXCEPTION_FOUND[0], 
+                                        CommandResponseCodes.ERROR_EXCEPTION_FOUND[1] + ex.Message)
+                };
             }
             return resp;
         }
@@ -33,7 +45,7 @@ namespace SRMCommandService
                     if (!item.IsClass) continue;
                     if (item.GetInterfaces().Contains(typeof(ICommand)))
                     {
-                        if (((ICommand)Activator.CreateInstance(item)).CommandName == command)
+                        if (((ICommand)Activator.CreateInstance(item)).CommandName.ToUpperInvariant() == command.ToUpperInvariant())
                         {
                             return (ICommand)Activator.CreateInstance(item);
                         }
@@ -41,7 +53,7 @@ namespace SRMCommandService
                 }
             } catch (Exception ex)
             {
-                //NOTHING
+                throw ex;
             }
             
             return null;
