@@ -7,8 +7,12 @@ namespace SRMCommandService
 {
     public class CommandService : ICommandService
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public CommandResponse[] ExecuteCommand(CommandRequest req)
         {
+            log.Info("ExecuteCommand: " + req.ToString());
+
             CommandResponse[] resp = null;
             try
             { 

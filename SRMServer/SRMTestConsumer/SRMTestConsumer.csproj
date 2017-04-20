@@ -84,7 +84,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Commands\SRMFileSystemCommand\SRMFileSystemCommand.csproj">
+    <ProjectReference Include="..\..\SRMAgent\SRMCommands\SRMFileSystemCommand\SRMFileSystemCommand.csproj">
       <Project>{fadd7591-a166-40e7-aed1-f2f2bff41de7}</Project>
       <Name>SRMFileSystemCommand</Name>
     </ProjectReference>

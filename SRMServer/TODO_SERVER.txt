@@ -1,0 +1,4 @@
+Server debe tener las siguientes entradas:
+	- Comandos a las maquinas.
+	- Comandos al servidor.
+
