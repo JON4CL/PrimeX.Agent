@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CFD0A3DE-39F6-4600-B6A5-53FD04080B5B}</ProjectGuid>
+    <ProjectGuid>{FADD7591-A166-40E7-AED1-F2F2BFF41DE7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRM.Agent.Watchers</RootNamespace>
-    <AssemblyName>SRMEventlogWatcher</AssemblyName>
+    <RootNamespace>SRM.Agent.Commands</RootNamespace>
+    <AssemblyName>SRMFileSystemCommand</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,7 +29,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Commons\SRMCommons\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,18 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SRMEventlogWatcher.cs" />
+    <Compile Include="DrivesInfoCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Commons\SRMAgentCommons.csproj">
+    <ProjectReference Include="..\..\..\Commons\SRMAgentCommons\SRMAgentCommons.csproj">
       <Project>{B3CE5003-156E-43A0-AD99-8B23829D50B4}</Project>
       <Name>SRMAgentCommons</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\JConfig\SRMCommons.csproj">
-      <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
+    <ProjectReference Include="..\..\..\..\Commons\SRMCommons\SRMCommons.csproj">
+      <Project>{a62f16b2-5744-4584-a630-b13457040e29}</Project>
       <Name>SRMCommons</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\SRMCommandService\SRMCommandService.csproj">
+      <Project>{2a833155-3ab6-4a20-aabb-cc20291ec6ca}</Project>
+      <Name>SRMCommandService</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

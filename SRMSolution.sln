@@ -3,23 +3,33 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMCommandService", "SRMAgent\SRMCommandService\SRMCommandService.csproj", "{2A833155-3AB6-4A20-AABB-CC20291EC6CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMCommandService", "SRM\Agent\Services\SRMCommandService\SRMCommandService.csproj", "{2A833155-3AB6-4A20-AABB-CC20291EC6CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMServiceCommandTest", "SRMAgent\SRMTestConsole\SRMServiceCommandTest.csproj", "{4BF0A59F-9FAA-4E19-BA3C-B2EBF8B74BC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMServiceCommandTest", "SRM\Agent\SRMTestConsole\SRMServiceCommandTest.csproj", "{4BF0A59F-9FAA-4E19-BA3C-B2EBF8B74BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMFileSystemCommand", "SRM\Agent\Components\Commands\SRMFileSystemCommand\SRMFileSystemCommand.csproj", "{FADD7591-A166-40E7-AED1-F2F2BFF41DE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMEventlogWatcher", "SRM\Agent\Components\Watchers\SRMEventlogWatcher\SRMEventlogWatcher.csproj", "{CFD0A3DE-39F6-4600-B6A5-53FD04080B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMCommons", "SRM\Commons\SRMCommons\SRMCommons.csproj", "{A62F16B2-5744-4584-A630-B13457040E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMAgentCommons", "SRM\Agent\Commons\SRMAgentCommons\SRMAgentCommons.csproj", "{B3CE5003-156E-43A0-AD99-8B23829D50B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMBeatWatcher", "SRM\Agent\Components\Watchers\SRMBeatWatcher\SRMBeatWatcher.csproj", "{E2D66E96-59BD-4C8F-B535-A665BE1CA3C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMAgentService", "SRM\Agent\SRMAgentService\SRMAgentService.csproj", "{1088624E-E11A-45CA-A642-19B78A531036}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMWatcherService", "SRM\Agent\Services\SRMWatcherService\SRMWatcherService.csproj", "{DC047A52-9EF9-457A-AAE6-555758B29806}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMWatcherServiceTest", "SRM\Agent\SRMWatcherServiceTest\SRMWatcherServiceTest.csproj", "{F0EFC383-47BD-4E6C-8575-DC1EE894C374}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMTestConsumer", "SRM\Server\SRMTestConsumer\SRMTestConsumer.csproj", "{01312C0B-73EC-4340-9F1C-1589F4413A3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMServerService", "SRM\Server\SRMServerService\SRMServerService.csproj", "{BDE1DB90-CBEC-4C1E-8F8F-A80E69ED1922}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{A806569D-201A-4BB4-AC4D-4F025430F9B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMFileSystemCommand", "SRMAgent\SRMCommands\SRMFileSystemCommand\SRMFileSystemCommand.csproj", "{FADD7591-A166-40E7-AED1-F2F2BFF41DE7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMTestConsumer", "SRMServer\SRMTestConsumer\SRMTestConsumer.csproj", "{01312C0B-73EC-4340-9F1C-1589F4413A3A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMAgentService", "SRMAgentService\SRMAgentService.csproj", "{1088624E-E11A-45CA-A642-19B78A531036}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMEventlogWatcher", "SRMEventlogWatcher\SRMEventlogWatcher.csproj", "{CFD0A3DE-39F6-4600-B6A5-53FD04080B5B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commons", "Commons", "{137BCB0E-506F-4B12-BEEE-E160598FF3C9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMCommons", "JConfig\SRMCommons.csproj", "{A62F16B2-5744-4584-A630-B13457040E29}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRM", "SRM", "{9CD93379-722D-45EC-A024-F3150A33CFDD}"
 EndProject
@@ -31,19 +41,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Watchers", "Watchers", "{FE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{C04EC6DE-93D5-4FA6-A4A3-5D8CB6F4E235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMServerService", "SRMServerService\SRMServerService.csproj", "{BDE1DB90-CBEC-4C1E-8F8F-A80E69ED1922}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commons", "Commons", "{8E8BB142-8126-49F7-8ED8-4B33ECB1A3FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMAgentCommons", "Commons\SRMAgentCommons.csproj", "{B3CE5003-156E-43A0-AD99-8B23829D50B4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{78B5B360-1382-4567-814A-C1B6150F1109}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMWatcherService", "SRMWatcherService\SRMWatcherService.csproj", "{DC047A52-9EF9-457A-AAE6-555758B29806}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMWatcherServiceTest", "SRMWatcherServiceTest\SRMWatcherServiceTest.csproj", "{F0EFC383-47BD-4E6C-8575-DC1EE894C374}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMBeatWatcher", "SRMBeatWatcher\SRMBeatWatcher.csproj", "{E2D66E96-59BD-4C8F-B535-A665BE1CA3C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

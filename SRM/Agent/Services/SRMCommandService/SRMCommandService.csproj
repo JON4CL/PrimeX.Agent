@@ -58,12 +58,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Commons\SRMAgentCommons.csproj">
+    <ProjectReference Include="..\..\Commons\SRMAgentCommons\SRMAgentCommons.csproj">
       <Project>{B3CE5003-156E-43A0-AD99-8B23829D50B4}</Project>
       <Name>SRMAgentCommons</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\JConfig\SRMCommons.csproj">
+    <ProjectReference Include="..\..\..\Commons\SRMCommons\SRMCommons.csproj">
       <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
       <Name>SRMCommons</Name>
     </ProjectReference>

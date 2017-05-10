@@ -91,7 +91,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JConfig\SRMCommons.csproj">
+    <ProjectReference Include="..\..\Commons\SRMCommons\SRMCommons.csproj">
       <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
       <Name>SRMCommons</Name>
     </ProjectReference>

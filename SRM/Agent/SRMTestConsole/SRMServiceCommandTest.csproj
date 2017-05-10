@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E2D66E96-59BD-4C8F-B535-A665BE1CA3C0}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4BF0A59F-9FAA-4E19-BA3C-B2EBF8B74BC1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRM.Agent.Watchers</RootNamespace>
-    <AssemblyName>SRMBeatWatcher</AssemblyName>
+    <RootNamespace>SRMServiceCommandTest</RootNamespace>
+    <AssemblyName>SRMServiceCommandTest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,24 +44,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SRMBeatWatcher.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Commons\SRMAgentCommons.csproj">
-      <Project>{B3CE5003-156E-43A0-AD99-8B23829D50B4}</Project>
-      <Name>SRMAgentCommons</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\JConfig\SRMCommons.csproj">
-      <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
-      <Name>SRMCommons</Name>
-      <Private>False</Private>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Services\SRMCommandService\SRMCommandService.csproj">
+      <Project>{2A833155-3AB6-4A20-AABB-CC20291EC6CA}</Project>
+      <Name>SRMCommandService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y  "*.*" "C:\SRMAgent\components\"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
