@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SRMCommandService;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using SRM.Agent.Services;
 
-namespace SRMTestConsole
+namespace SRMServiceCommandTest
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        // ReSharper disable once UnusedParameter.Local
+        private static void Main(string[] args)
         {
-            Uri baseAddress = new Uri("http://localhost:8080/CommandService");
+            var baseAddress = new Uri("http://localhost:8080/CommandService");
 
             // Create the ServiceHost.
-            using (ServiceHost host = new ServiceHost(typeof(CommandService), baseAddress))
+            using (var host = new ServiceHost(typeof (CommandService), baseAddress))
             {
                 // Enable metadata publishing.
-                ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
-                smb.HttpGetEnabled = true;
-                smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                var smb = new ServiceMetadataBehavior
+                {
+                    HttpGetEnabled = true,
+                    MetadataExporter = {PolicyVersion = PolicyVersion.Policy15}
+                };
                 host.Description.Behaviors.Add(smb);
 
                 // Open the ServiceHost to start listening for messages. Since

@@ -7,7 +7,7 @@
     <ProjectGuid>{1088624E-E11A-45CA-A642-19B78A531036}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRMAgentService</RootNamespace>
+    <RootNamespace>SRM.Agent.Service</RootNamespace>
     <AssemblyName>SRMAgentService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,14 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,11 +57,11 @@
     <Compile Include="AgentServiceCommand.Designer.cs">
       <DependentUpon>AgentServiceCommand.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgentServiceMonitor.cs">
+    <Compile Include="AgentServiceWatcher.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AgentServiceMonitor.Designer.cs">
-      <DependentUpon>AgentServiceMonitor.cs</DependentUpon>
+    <Compile Include="AgentServiceWatcher.Designer.cs">
+      <DependentUpon>AgentServiceWatcher.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,9 +74,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JConfig\SRMCommons.csproj">
+      <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
+      <Name>SRMCommons</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SRMAgent\SRMCommandService\SRMCommandService.csproj">
+      <Project>{2A833155-3AB6-4A20-AABB-CC20291EC6CA}</Project>
+      <Name>SRMCommandService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SRMWatcherService\SRMWatcherService.csproj">
+      <Project>{dc047a52-9ef9-457a-aae6-555758b29806}</Project>
+      <Name>SRMWatcherService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "*.*" "C:\SRMAgent\bin"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

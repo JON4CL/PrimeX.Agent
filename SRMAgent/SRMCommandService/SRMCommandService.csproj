@@ -9,7 +9,7 @@
     <ProjectGuid>{2A833155-3AB6-4A20-AABB-CC20291EC6CA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRMCommandService</RootNamespace>
+    <RootNamespace>SRM.Agent.Services</RootNamespace>
     <AssemblyName>SRMCommandService</AssemblyName>
     <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,14 +46,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandResponseCodes.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandService.cs" />
+    <Compile Include="DataContract\CommandRequest.cs" />
+    <Compile Include="DataContract\CommandResponse.cs" />
+    <Compile Include="ServiceContract\ICommandService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Commons\SRMAgentCommons.csproj">
+      <Project>{B3CE5003-156E-43A0-AD99-8B23829D50B4}</Project>
+      <Name>SRMAgentCommons</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\JConfig\SRMCommons.csproj">
+      <Project>{A62F16B2-5744-4584-A630-B13457040E29}</Project>
+      <Name>SRMCommons</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -75,6 +84,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

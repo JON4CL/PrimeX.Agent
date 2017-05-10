@@ -1,99 +1,120 @@
-﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+﻿using System;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+using SRM.Agent.Services;
+using SRM.Commons;
 
-namespace SRMAgentService
+namespace SRM.Agent.Service
 {
-    public partial class AgentServiceCommand : ServiceBase
+    public sealed partial class AgentServiceCommand : ServiceBase
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ServiceHost _host;
 
         public AgentServiceCommand()
         {
-            Log.Info("AgentServiceCommand() Start");
+            JLogger.LogInfo(this, "AgentServiceCommand() Start");
 
-            this.ServiceName = "SRMAgentService_Command";
-            this.EventLog.Log = "Application";
+            ServiceName = "SRMAgentServiceCommand";
+            EventLog.Log = "Application";
 
-            // These Flags set whether or not to handle that specific
-            //  type of event. Set to true if you need it, false otherwise.
-            this.CanHandlePowerEvent = true;
-            this.CanHandleSessionChangeEvent = true;
-            this.CanPauseAndContinue = true;
-            this.CanShutdown = true;
-            this.CanStop = true;
+            CanHandlePowerEvent = true;
+            CanHandleSessionChangeEvent = true;
+            CanPauseAndContinue = true;
+            CanShutdown = true;
+            CanStop = true;
 
             InitializeComponent();
 
-            Log.Info("AgentServiceCommand() End");
+            JLogger.LogInfo(this, "AgentServiceCommand() End");
         }
 
         protected override void OnStart(string[] args)
         {
-            Log.Info("OnStart() Start");
+            JLogger.LogInfo(this, "OnStart() Start");
+
             base.OnStart(args);
-            Log.Info("OnStart() End");
+            _host?.Close();
+
+            try
+            {
+                JLogger.LogDebug(this, "Se crea el service host con la direccion base.");
+                var baseAddress = new Uri("http://localhost:8080/CommandService");
+                _host = new ServiceHost(typeof (CommandService), baseAddress);
+
+                JLogger.LogDebug(this, "Se configura para presentar el metadata.");
+                var smb = new ServiceMetadataBehavior
+                {
+                    HttpGetEnabled = true,
+                    MetadataExporter = {PolicyVersion = PolicyVersion.Policy15}
+                };
+                _host.Description.Behaviors.Add(smb);
+
+                JLogger.LogDebug(this, "Se Abre la comunicacion.");
+                _host.Open();
+            }
+            catch (Exception ex)
+            {
+                JLogger.LogError(this, "Error al crear el host.", ex);
+            }
+
+            JLogger.LogInfo(this, "OnStart() End");
         }
 
         protected override void OnStop()
         {
-            Log.Info("OnStop() Start");
+            JLogger.LogInfo(this, "OnStop() Start");
+
             base.OnStop();
-            Log.Info("OnStop() End");
+            if (_host != null)
+            {
+                _host.Close();
+                _host = null;
+            }
+
+            JLogger.LogInfo(this, "OnStop() End");
         }
 
         protected override void OnPause()
         {
-            Log.Info("OnPause() Start");
+            JLogger.LogInfo(this, "OnPause() Start");
             base.OnPause();
-            Log.Info("OnPause() End");
+            JLogger.LogInfo(this, "OnPause() End");
         }
 
         protected override void OnContinue()
         {
-            Log.Info("OnContinue() Start");
+            JLogger.LogInfo(this, "OnContinue() Start");
             base.OnContinue();
-            Log.Info("OnContinue() End");
+            JLogger.LogInfo(this, "OnContinue() End");
         }
 
         protected override void OnShutdown()
         {
-            Log.Info("OnShutdown() Start");
+            JLogger.LogInfo(this, "OnShutdown() Start");
             base.OnShutdown();
-            Log.Info("OnShutdown() End");
+            JLogger.LogInfo(this, "OnShutdown() End");
         }
 
         protected override void OnCustomCommand(int command)
         {
-            Log.Info("OnCustomCommand() Start");
-            //  A custom command can be sent to a service by using this method:
-            //#  int command = 128; //Some Arbitrary number between 128 & 256
-            //#  ServiceController sc = new ServiceController("NameOfService");
-            //#  sc.ExecuteCommand(command);
-
+            JLogger.LogInfo(this, "OnCustomCommand() Start");
             base.OnCustomCommand(command);
-            Log.Info("OnCustomCommand() End");
+            JLogger.LogInfo(this, "OnCustomCommand() End");
         }
 
         protected override bool OnPowerEvent(PowerBroadcastStatus powerStatus)
         {
-            Log.Info("OnPowerEvent() Start");
+            JLogger.LogInfo(this, "OnPowerEvent() Start");
             return base.OnPowerEvent(powerStatus);
-            Log.Info("OnPowerEvent() End");
+            //JLogger.LogInfo(this, "OnPowerEvent() End");
         }
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
         {
-            Log.Info("OnSessionChange() Start");
+            JLogger.LogInfo(this, "OnSessionChange() Start");
             base.OnSessionChange(changeDescription);
-            Log.Info("OnSessionChange() End");
+            JLogger.LogInfo(this, "OnSessionChange() End");
         }
     }
 }

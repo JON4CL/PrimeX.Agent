@@ -1,6 +1,6 @@
-﻿namespace SRMAgentService
+﻿namespace SRM.Agent.Service
 {
-    partial class AgentServiceCommand
+    sealed partial class AgentServiceCommand
     {
         /// <summary> 
         /// Required designer variable.

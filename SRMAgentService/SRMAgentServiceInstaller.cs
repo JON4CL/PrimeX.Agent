@@ -1,40 +1,45 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Configuration.Install;
-using System.Linq;
 using System.ServiceProcess;
-using System.Threading.Tasks;
 
+//installutil.exe SRMAgentService.exe 
 
-//installutil.exe MyNewService.exe 
-
-namespace SRMAgentService
+namespace SRM.Agent.Service
 {
     [RunInstaller(true)]
     public partial class SRMAgentServiceInstaller : Installer
     {
         public SRMAgentServiceInstaller()
         {
-            ServiceProcessInstaller serviceProcessInstaller = new ServiceProcessInstaller();
-            ServiceInstaller serviceInstaller = new ServiceInstaller();
-
             //# Service Account Information
-            serviceProcessInstaller.Account = ServiceAccount.LocalSystem;
-            serviceProcessInstaller.Username = null;
-            serviceProcessInstaller.Password = null;
+            var serviceProcessInstaller = new ServiceProcessInstaller
+            {
+                Account = ServiceAccount.LocalSystem,
+                Username = null,
+                Password = null
+            };
 
             //# Service Information
-            serviceInstaller.DisplayName = "SRMAgentService";
-            serviceInstaller.StartType = ServiceStartMode.Automatic;
+            var serviceInstallerCommand = new ServiceInstaller
+            {
+                ServiceName = "SRMAgentServiceCommand",
+                DisplayName = "SRMAgentServiceCommand",
+                Description = "SRMAgentService process request commands",
+                StartType = ServiceStartMode.Automatic,
+                ServicesDependedOn = new[] {"SRMAgentServiceWatcher"}
+            };
 
-            //# This must be identical to the WindowsService.ServiceBase name
-            //# set in the constructor of WindowsService.cs
-            serviceInstaller.ServiceName = "SRMAgentService";
+            var serviceInstallerWatcher = new ServiceInstaller
+            {
+                ServiceName = "SRMAgentServiceWatcher",
+                DisplayName = "SRMAgentServiceWatcher",
+                Description = "SRMAgentService Watcher events",
+                StartType = ServiceStartMode.Automatic
+            };
 
-            this.Installers.Add(serviceProcessInstaller);
-            this.Installers.Add(serviceInstaller);
+            Installers.Add(serviceProcessInstaller);
+            Installers.Add(serviceInstallerCommand);
+            Installers.Add(serviceInstallerWatcher);
 
             InitializeComponent();
         }

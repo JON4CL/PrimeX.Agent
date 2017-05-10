@@ -1,34 +1,29 @@
-﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
+using SRM.Commons;
 
-namespace SRMAgentService
+namespace SRM.Agent.Service
 {
-    static class Program
+    internal static class Program
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
-        /// The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
-        static void Main()
+        private static void Main()
         {
-            Log.Info("SRMAgentService Main Start...");
+            JLogger.LogInfo(null, "SRMAgentService Main Start...");
 
-            Log.Debug("SRMAgentService creating services instances array");
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            JLogger.LogDebug(null, "SRMAgentService creating services instances array");
+            ServiceBase[] servicesToRun = new ServiceBase[]
             {
-                new AgentServiceMonitor(),
-                new AgentServiceCommand()
+                new AgentServiceCommand(),
+                new AgentServiceWatcher()
             };
-            Log.Debug("SRMAgentService run services instances array");
-            ServiceBase.Run(ServicesToRun);
+            JLogger.LogDebug(null, "SRMAgentService run services instances array");
+            ServiceBase.Run(servicesToRun);
 
-            Log.Info("SRMAgentService Main End...");
+            JLogger.LogInfo(null, "SRMAgentService Main End...");
         }
     }
 }

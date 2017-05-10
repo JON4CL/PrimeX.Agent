@@ -2,64 +2,83 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SRM.Agent.Commons;
+using SRM.Agent.Services.DataContract;
+using SRM.Agent.Services.ServiceContract;
+using SRM.Commons;
 
-namespace SRMCommandService
+namespace SRM.Agent.Services
 {
     public class CommandService : ICommandService
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         public CommandResponse[] ExecuteCommand(CommandRequest req)
         {
-            log.Info("ExecuteCommand: " + req.ToString());
+            JLogger.LogInfo(this, "ExecuteCommand:{0}", req.ToString());
 
-            CommandResponse[] resp = null;
+            CommandResponse[] resp;
             try
-            { 
-                ICommand cmd = getCommand(req.serviceName, req.serviceCommand);
+            {
+                var cmd = GetCommand(req.ServiceName, req.ServiceCommand);
                 if (cmd != null)
-                { 
-                    resp = cmd.runCommand(req);
+                {
+                    resp = (CommandResponse[]) cmd.RunCommand(req);
                 }
                 else
                 {
-                    resp = new CommandResponse[] {
-                        new CommandResponse(CommandResponseCodes.ERROR_COMMAND_NOT_FOUND[0], 
-                                            CommandResponseCodes.ERROR_COMMAND_NOT_FOUND[1])
+                    resp = new[]
+                    {
+                        new CommandResponse(CommandResponseCodes.ErrorCommandNotFound[0],
+                            CommandResponseCodes.ErrorCommandNotFound[1])
                     };
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                resp = new CommandResponse[] {
-                    new CommandResponse(CommandResponseCodes.ERROR_EXCEPTION_FOUND[0], 
-                                        CommandResponseCodes.ERROR_EXCEPTION_FOUND[1] + ex.Message)
+                resp = new[]
+                {
+                    new CommandResponse(CommandResponseCodes.ErrorExceptionFound[0],
+                        CommandResponseCodes.ErrorExceptionFound[1] + ex.Message)
                 };
             }
             return resp;
         }
 
-        private ICommand getCommand(string id, string command)
+        private ICommand GetCommand(string id, string command)
         {
-            string assembly = Path.GetFullPath(@".\services\" + id + ".dll");
+            JLogger.LogInfo(this, "getCommand(): id:{0} command:{1}", id, command);
+
+            var assembly = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"..\commands\" + id + ".dll");
+            JLogger.LogDebug("assembly:{0}", assembly);
+
             try
             {
-                Assembly ptrAssembly = Assembly.LoadFile(assembly);
-                foreach (Type item in ptrAssembly.GetTypes())
+                var ptrAssembly = Assembly.LoadFile(assembly);
+                //foreach (var item in ptrAssembly.GetTypes())
+                //{
+                //    if (!item.IsClass) continue;
+                //    if (item.GetInterfaces().Contains(typeof (ICommand)))
+                //    {
+                //        if (((ICommand) Activator.CreateInstance(item)).GetCommandName().ToUpperInvariant() ==
+                //            command.ToUpperInvariant())
+                //        {
+                //            return (ICommand) Activator.CreateInstance(item);
+                //        }
+                //    }
+                //}
+                foreach (var item in from item in ptrAssembly.GetTypes()
+                                     where item.IsClass
+                                     where item.GetInterfaces().Contains(typeof(ICommand))
+                                     where string.Equals(((ICommand)Activator.CreateInstance(item)).GetCommandName(), command, StringComparison.InvariantCultureIgnoreCase)
+                                     select item)
                 {
-                    if (!item.IsClass) continue;
-                    if (item.GetInterfaces().Contains(typeof(ICommand)))
-                    {
-                        if (((ICommand)Activator.CreateInstance(item)).CommandName.ToUpperInvariant() == command.ToUpperInvariant())
-                        {
-                            return (ICommand)Activator.CreateInstance(item);
-                        }
-                    }
+                    return (ICommand)Activator.CreateInstance(item);
                 }
-            } catch (Exception ex)
-            {
-                throw ex;
             }
-            
+            catch (Exception ex)
+            {
+                JLogger.LogError(this, "Error trying to LoadAssembly:{0}", ex.Message);
+            }
+
             return null;
         }
     }

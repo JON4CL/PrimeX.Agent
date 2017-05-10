@@ -1,101 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using SRMCommandService;
 using System.IO;
-using Newtonsoft.Json;
 using System.Linq;
+using Newtonsoft.Json;
+using SRM.Agent.Commons;
+using SRM.Agent.Services;
+using SRM.Agent.Services.DataContract;
+using SRM.Commons;
 
-namespace SRMFileSystemCommand
+namespace SRM.Agent.Commands
 {
     public class JDriveInfo
     {
+        // ReSharper disable once InconsistentNaming
         public string DEVICEID = "";
+        // ReSharper disable once InconsistentNaming
         public string FREESPACE = "";
+        // ReSharper disable once InconsistentNaming
         public string TOTALSIZE = "";
+        // ReSharper disable once InconsistentNaming
         public string USEDSPACE = "";
     }
 
     public class DrivesInfoCommand : ICommand
     {
-        public static string commandServiceName = "SRMFileSystemCommand";
-        public static string commandName = "GetDrivesInfo";
-        public static string commandDescription = "Get the drives information in a JSON format.";
-        public static string commandVersion = "0.0.1";
+        //PARAMETERS
+        private const string NoEmptyDrives = "NO_EMPTY_DRIVES";
+        private const string NoRemovableDrives = "NO_REMOVABLE_DRIVES";
 
-        private const string NO_EMPTY_DRIVES = "NO_EMPTY_DRIVES";
-        private const string NO_REMOVABLE_DRIVES = "NO_REMOVABLE_DRIVES";
-
-        public string CommandName
+        public static string CommandServiceName = "SRMFileSystemCommand";
+        public static string CommandName = "GetDrivesInfo";
+        public static string CommandDescription = "Get the drives information in a JSON format.";
+        public static string CommandVersion = "0.0.1";
+        // ----------------------------------------------------------------
+        // THIS COMMAND LIST ALL THE AVAILABLE DRIVES IN THE MACHINE
+        // ----------------------------------------------------------------
+        public ICommandResponse[] RunCommand(ICommandRequest request)
         {
-            get { return commandName; }
-        }
+            JLogger.LogInfo(this, "runCommand:{0}", request.ToString());
 
-        public string CommandDescription
-        {
-            get { return commandDescription; }
-        }
-
-        public string CommandVersion
-        {
-            get { return commandVersion; }
-        }
-
-        public CommandResponse[] runCommand(CommandRequest request)
-        {
-            // ----------------------------------------------------------------
-            // THIS COMMAND LIST ALL THE AVAILABLE DRIVES IN THE MACHINE
-            // ----------------------------------------------------------------
-            // POSSIBLE PARAMS:
-            //     NO_EMPTY_DRIVES     - DON'T RETURN EMPTY DRIVES
-            //     NO_REMOVABLE_DRIVES - DON'T RETURN REMOVABLE DRIVES
-            // ----------------------------------------------------------------
-
-            //request.valueParam.Contains<string>("NO_EMPTY_DRIVES");
-            CommandResponse[] cmdResp = null;
-            List<JDriveInfo> driveInfoList = new List<JDriveInfo>();
+            ICommandResponse[] cmdResp;
+            var driveInfoList = new List<JDriveInfo>();
             try
             {
-                string respData = "";
-                
-                foreach (DriveInfo di in DriveInfo.GetDrives())
-                {
-                    if (!di.IsReady)
-                    {
-                        continue;
-                    }
-                    if (di.DriveType != DriveType.Fixed && request.valueParam.Contains<string>("NO_REMOVABLE_DRIVES") == true)
-                    {
-                        continue;
-                    }
-                    if (di.TotalSize == 0 && request.valueParam.Contains<string>("NO_EMPTY_DRIVES") == true)
-                    {
-                        continue;
-                    }
-                    var data = new JDriveInfo()
-                    {
-                        DEVICEID = di.Name,
-                        FREESPACE = di.TotalFreeSpace.ToString(),
-                        TOTALSIZE = di.TotalSize.ToString(),
-                        USEDSPACE = (di.TotalSize - di.TotalFreeSpace).ToString()
-                    };
-                    driveInfoList.Add(data);
-                }
+                //foreach (var di in DriveInfo.GetDrives())
+                //{
+                //    if (!di.IsReady)
+                //    {
+                //        continue;
+                //    }
 
-                respData = JsonConvert.SerializeObject(driveInfoList.ToArray());
-                cmdResp = new CommandResponse[1] {
-                    new CommandResponse(CommandResponseCodes.OK_COMMAND_SUCCESS[0],
-                                        respData)
+                //    //NO_REMOVABLE_DRIVES - DON'T RETURN REMOVABLE DRIVES
+                //    if (di.DriveType != DriveType.Fixed && request.GetParams().Contains("NO_REMOVABLE_DRIVES"))
+                //    {
+                //        continue;
+                //    }
+
+                //    //NO_EMPTY_DRIVES - DON'T RETURN EMPTY DRIVES
+                //    if (di.TotalSize == 0 && request.GetParams().Contains("NO_EMPTY_DRIVES"))
+                //    {
+                //        continue;
+                //    }
+                //    var data = new JDriveInfo
+                //    {
+                //        DEVICEID = di.Name,
+                //        FREESPACE = di.TotalFreeSpace.ToString(),
+                //        TOTALSIZE = di.TotalSize.ToString(),
+                //        USEDSPACE = (di.TotalSize - di.TotalFreeSpace).ToString()
+                //    };
+                //    driveInfoList.Add(data);
+                //}
+
+                driveInfoList.AddRange(from di in DriveInfo.GetDrives()
+                    where di.IsReady
+                    where di.DriveType == DriveType.Fixed || !request.GetParams().Contains(NoRemovableDrives)
+                    where di.TotalSize != 0 || !request.GetParams().Contains(NoEmptyDrives)
+                    select new JDriveInfo
+                    {
+                        DEVICEID = di.Name, FREESPACE = di.TotalFreeSpace.ToString(), TOTALSIZE = di.TotalSize.ToString(), USEDSPACE = (di.TotalSize - di.TotalFreeSpace).ToString()
+                    });
+
+                var respData = JsonConvert.SerializeObject(driveInfoList.ToArray());
+                cmdResp = new ICommandResponse[]
+                {
+                    new CommandResponse(CommandResponseCodes.OkCommandSuccess[0],
+                        respData)
                 };
             }
             catch (Exception ex)
             {
-                cmdResp = new CommandResponse[1] {
-                    new CommandResponse(CommandResponseCodes.ERROR_EXCEPTION_FOUND[0], 
-                                        CommandResponseCodes.ERROR_EXCEPTION_FOUND[1] + ex.Message)
+                cmdResp = new ICommandResponse[]
+                {
+                    new CommandResponse(CommandResponseCodes.ErrorExceptionFound[0],
+                        CommandResponseCodes.ErrorExceptionFound[1] + ex.Message)
                 };
             }
 
+            JLogger.LogInfo(this, "runCommand Response:{0}", cmdResp.ToString());
+
             return cmdResp;
+        }
+
+        public string GetCommandName()
+        {
+            return CommandName;
+        }
+
+        public string GetCommandDescription()
+        {
+            return CommandDescription;
+        }
+
+        public string GetCommandVersion()
+        {
+            return CommandVersion;
+        }
+
+        public string GetCommandServiceName()
+        {
+            return CommandServiceName;
         }
     }
 }

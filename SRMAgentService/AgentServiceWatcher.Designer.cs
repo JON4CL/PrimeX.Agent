@@ -1,6 +1,6 @@
-﻿namespace SRMAgentService
+﻿namespace SRM.Agent.Service
 {
-    partial class AgentServiceMonitor
+    sealed partial class AgentServiceWatcher
     {
         /// <summary> 
         /// Required designer variable.

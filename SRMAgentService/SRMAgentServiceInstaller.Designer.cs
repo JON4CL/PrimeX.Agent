@@ -1,4 +1,4 @@
-﻿namespace SRMAgentService
+﻿namespace SRM.Agent.Service
 {
     partial class SRMAgentServiceInstaller
     {

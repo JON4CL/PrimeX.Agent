@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SRMCommandService
+﻿namespace SRM.Agent.Services
 {
     public class CommandResponseCodes
     {
-        public static readonly string[] ERROR_COMMAND_NOT_FOUND = { "E0001", "Command not found." };
-        public static readonly string[] ERROR_EXCEPTION_FOUND = { "E0002", "Exception found. " };
+        public static readonly string[] ErrorCommandNotFound = {"E0001", "Command not found."};
+        public static readonly string[] ErrorExceptionFound = {"E0002", "Exception found. "};
+        public static readonly string[] OkCommandSuccess = {"O0000", "Command executed successfully. "};
 
-        public static readonly string[] OK_COMMAND_SUCCESS = { "O0000", "Command executed successfully. " };
+        private CommandResponseCodes()
+        {
+        }
     }
 }
