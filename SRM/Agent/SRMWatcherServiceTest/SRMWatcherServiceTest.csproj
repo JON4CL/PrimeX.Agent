@@ -50,14 +50,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Commons\SRMServerService\SRMServerService.csproj">
+      <Project>{16428E55-CC39-4643-ADED-B9F2E91CF935}</Project>
+      <Name>SRMServerService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\SRMWatcherService\SRMWatcherService.csproj">
       <Project>{DC047A52-9EF9-457A-AAE6-555758B29806}</Project>
       <Name>SRMWatcherService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SRMAgent\SRMAgent.csproj">
+      <Project>{14199552-51cf-43de-8bee-077837782c30}</Project>
+      <Name>SRMAgent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

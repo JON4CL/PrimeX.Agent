@@ -2,26 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using SRM.Agent.Commons;
 using SRM.Agent.Services;
 using SRM.Agent.Services.DataContract;
 using SRM.Commons;
-using Newtonsoft.Json;
 
 namespace SRM.Agent.Commands
 {
-    public class JDriveInfo
-    {
-        // ReSharper disable once InconsistentNaming
-        public string DEVICEID = "";
-        // ReSharper disable once InconsistentNaming
-        public string FREESPACE = "";
-        // ReSharper disable once InconsistentNaming
-        public string TOTALSIZE = "";
-        // ReSharper disable once InconsistentNaming
-        public string USEDSPACE = "";
-    }
-
     public class DrivesInfoCommand : ICommand
     {
         //PARAMETERS

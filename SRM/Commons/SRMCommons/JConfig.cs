@@ -17,8 +17,7 @@ namespace SRM.Commons
 
         private readonly string _configFileBasePath =
             Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"..\config\");
-
-        //private string ConfigFileBasePath = Path.GetFullPath(Environment.GetEnvironmentVariable("SRMAGENT_PATH", EnvironmentVariableTarget.User) + @"\config\");
+        
         private readonly string _configFileName;
         private JConfigItem[] _jconfigItems;
 
@@ -86,7 +85,7 @@ namespace SRM.Commons
             }
         }
 
-        public JConfigItem GetConfItemByKey(string key)
+        private JConfigItem GetConfItemByKey(string key)
         {
             JLogger.LogInfo(this, "GetConfItemByKey() key:{0}", key);
             var item = _jconfigItems.FirstOrDefault(x => x.Key == key);

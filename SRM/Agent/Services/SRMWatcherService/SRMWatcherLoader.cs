@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using SRM.Agent;
 using SRM.Agent.Commons;
+using SRM.Agent.Commons.FactHandler;
 using SRM.Commons;
 
 namespace SRM.Agent.Services
@@ -13,11 +15,14 @@ namespace SRM.Agent.Services
     public class WatcherLoader
     {
         //CONFIG FIELD
-        public static JConfig Config = new JConfig("SRMWatcherLoader.config");
+        private static readonly JConfig Config = new JConfig("SRMWatcherLoader.config");
         private readonly object _objectLock = new object();
         //FACT LOG FILE
         private readonly string _savedFactFileName = Config.GetValueByKey("FACTWATCHER_LOG");
+        private readonly string _factStorePath = SRMAgentPaths.SRMFacts;
         private readonly List<IFactWatcher> _watchers;
+        //
+        private readonly SRMServerAccess _serverAccess = new SRMServerAccess();
 
         public WatcherLoader()
         {
@@ -29,7 +34,7 @@ namespace SRM.Agent.Services
         private void LoadWatchers()
         {
             JLogger.LogInfo(this, "LoadWatchers()");
-            var watchers = Directory.EnumerateFiles(SRMPaths.SRMComponents, "*.dll").ToList();
+            var watchers = Directory.EnumerateFiles(SRMAgentPaths.SRMComponents, "*.dll").ToList();
             foreach (var watcher in watchers)
             {
                 JLogger.LogDebug(this, "Component found: {0}", watcher);
@@ -88,8 +93,31 @@ namespace SRM.Agent.Services
         private void OnNewFactProcess(object sender, EventArgs e)
         {
             JLogger.LogInfo(this, "OnNewFactProcess()");
+            var ea = (FactWatcherEventArgs)e;
 
-            var ea = (FactWatcherEventArgs) e;
+            var sbFactMessage = new StringBuilder();
+            sbFactMessage.AppendFormat("{0}-{1}-{2}", DateTime.Now.ToString("yyyyMMddHHmmssff",
+                    CultureInfo.InvariantCulture),
+                ea.FactWatcherName,
+                ea.FactData);
+
+            //string factFileName = _factStorePath + DateTime.Now.ToString("yyyyMMddHHmmssffff", CultureInfo.InvariantCulture) + "-" + 
+            //    ea.FactDatetime.ToString("yyyyMMddHHmmssffff", CultureInfo.InvariantCulture) + ".log";
+            //JLogger.LogDebug(this, "Opening {0} file to write", factFileName);
+            //using (var factFile = File.Open(factFileName, FileMode.CreateNew, FileAccess.Write))
+            //{
+            //    JLogger.LogDebug(this, "Writing to file", factFileName);
+            //    factFile.Write(Encoding.ASCII.GetBytes(sbFactMessage.ToString()), 0, sbFactMessage.Length);
+            //}
+
+            _serverAccess.ProcessFact(new Fact(){
+                MachineId = 0,
+                AgentTimestamp = DateTime.Now.ToString("yyyyMMddHHmmssff", CultureInfo.InvariantCulture),
+                Watcher = ea.FactWatcherName,
+                Datetime = ea.FactDatetime.ToString("yyyyMMddHHmmssff", CultureInfo.InvariantCulture),
+                Data = ea.FactData
+            });
+
             SaveFactToLog(ea.FactWatcherName, ea.FactData);
         }
 
@@ -110,9 +138,7 @@ namespace SRM.Agent.Services
                 lock (_objectLock)
                 {
                     JLogger.LogDebug(this, "Opening {0} file to write", _savedFactFileName);
-                    using (
-                        var factFile = File.Open(SRMPaths.SRMData + _savedFactFileName, FileMode.Append, FileAccess.Write)
-                        )
+                    using (var factFile = File.Open(SRMAgentPaths.SRMData + _savedFactFileName, FileMode.Append, FileAccess.Write))
                     {
                         JLogger.LogDebug(this, "Writing to file", _savedFactFileName);
                         factFile.Write(Encoding.ASCII.GetBytes(sbFactMessage.ToString()), 0, sbFactMessage.Length);

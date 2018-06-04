@@ -53,8 +53,8 @@
   <ItemGroup>
     <Compile Include="JConfig.cs" />
     <Compile Include="JLogger.cs" />
+    <Compile Include="Machine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SRMPaths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config">
@@ -63,7 +63,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "*.*" "C:\SRMAgent\bin"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "*.*" "C:\SRMAgent\bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

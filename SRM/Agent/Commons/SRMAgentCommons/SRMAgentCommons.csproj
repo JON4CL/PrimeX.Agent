@@ -46,10 +46,17 @@
     <Compile Include="ICommandResponse.cs" />
     <Compile Include="IFactWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SRMAgentPaths.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Commons\SRMCommons\SRMCommons.csproj">
+      <Project>{a62f16b2-5744-4584-a630-b13457040e29}</Project>
+      <Name>SRMCommons</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y  "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y  "*.*" "C:\SRMAgent\bin\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

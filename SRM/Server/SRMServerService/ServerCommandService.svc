@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="SRM.Server.Service.ServerCommandService" CodeBehind="ServerCommandService.svc.cs" %>

@@ -223,7 +223,7 @@ namespace SRM.Agent.Watchers
             JLogger.LogDebug(this, "Opening {0} file to write", _savedFactFileName);
             lock (_objectLock)
             {
-                using (var factFile = File.Open(SRMPaths.SRMData + _savedFactFileName, FileMode.Append, FileAccess.Write)
+                using (var factFile = File.Open(SRMAgentPaths.SRMData + _savedFactFileName, FileMode.Append, FileAccess.Write)
                     )
                 {
                     JLogger.LogDebug(this, "Writing to file", _savedFactFileName);
